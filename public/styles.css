@@ -393,3 +393,9 @@ select.inp{appearance:none;background-image:linear-gradient(45deg,transparent 50
 .ba .bl.a{left:.8rem}.ba .bl.d{right:.8rem;color:var(--gold2)}
 .ba figcaption{position:absolute;left:0;right:0;bottom:0;padding:1.2rem 1rem .9rem;background:linear-gradient(transparent,rgba(13,10,11,.8));font:italic 400 1.2rem var(--serif);pointer-events:none}
 .ba::before{content:"⇆";position:absolute;z-index:2;top:50%;left:var(--p);transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--gold2);color:var(--on-gold);font-weight:800;box-shadow:var(--shadow);pointer-events:none}
+/* Ver/ocultar contraseña (ojo.js) */
+.pw-caja{position:relative;display:block}
+.pw-caja .inp{padding-right:3.2rem}
+.pw-ojo{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:44px;height:44px;display:grid;place-items:center;border:0;background:none;color:var(--mute);border-radius:10px;cursor:pointer}
+.pw-ojo:hover{color:var(--gold2)}
+.pw-ojo:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
