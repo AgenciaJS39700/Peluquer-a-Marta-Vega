@@ -399,3 +399,12 @@ select.inp{appearance:none;background-image:linear-gradient(45deg,transparent 50
 .pw-ojo{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:44px;height:44px;display:grid;place-items:center;border:0;background:none;color:var(--mute);border-radius:10px;cursor:pointer}
 .pw-ojo:hover{color:var(--gold2)}
 .pw-ojo:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+
+/* Añadir y quitar desde la tarjeta de la tienda */
+.qty-c{background:var(--gold);color:var(--on-gold);border-radius:999px;padding:3px;gap:.15rem}
+.qty-c button{width:36px;height:36px;border:0;background:rgba(0,0,0,.12);color:inherit;font-size:1.1rem;display:grid;place-items:center}
+.qty-c span{min-width:2.2ch}
+.pd .ft .pr{white-space:nowrap}
+.pd .ft:has(.qty-c){flex-wrap:wrap}
+.pd .ft:has(.qty-c) .ctl{flex:1 1 100%}
+.pd .ft .qty-c{display:flex;justify-content:space-between;width:100%}

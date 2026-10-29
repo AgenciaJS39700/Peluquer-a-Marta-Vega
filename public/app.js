@@ -84,10 +84,17 @@
   $$(".tabs .chip").forEach(function (b) { b.addEventListener("click", function () { $$(".tabs .chip").forEach(function (x) { x.setAttribute("aria-pressed", x === b); }); drawServices(b.dataset.f); }); });
   function drawShop() {
     $("#shop").innerHTML = CAT.productos.map(function (p) {
-      return '<article class="pd rv"><div class="im">' + pic(p.img, p.nombre) + (p.tag ? '<span class="tag">' + esc(p.tag) + "</span>" : "") + '</div><div class="bd"><h3>' + esc(p.nombre) + "</h3><p>" + esc(p.desc) + '</p><div class="ft"><span class="pr">' + eur(p.precio) + '</span><button class="add" type="button" data-add="' + p.id + '" aria-label="Añadir ' + esc(p.nombre) + ' a la cesta"><svg class="ico"><use href="#i-plus"/></svg></button></div></div></article>';
+      return '<article class="pd rv"><div class="im">' + pic(p.img, p.nombre) + (p.tag ? '<span class="tag">' + esc(p.tag) + "</span>" : "") + '</div><div class="bd"><h3>' + esc(p.nombre) + "</h3><p>" + esc(p.desc) + '</p><div class="ft"><span class="pr">' + eur(p.precio) + '</span><span class="ctl" data-ctl="' + p.id + '">' + ctl(p) + "</span></div></div></article>";
     }).join("");
     reveal($("#shop"));
   }
+  // Botón de la tarjeta: «+» si no está en la cesta; «− cantidad +» si ya está
+  function ctl(p) {
+    var n = cart[p.id] || 0;
+    if (!n) return '<button class="add" type="button" data-add="' + p.id + '" aria-label="Añadir ' + esc(p.nombre) + ' a la cesta"><svg class="ico"><use href="#i-plus"/></svg></button>';
+    return '<span class="qty qty-c" role="group" aria-label="Cantidad de ' + esc(p.nombre) + '"><button type="button" data-cq="' + p.id + '" data-d="-1" aria-label="Quitar uno">−</button><span aria-live="polite">' + n + '</span><button type="button" data-cq="' + p.id + '" data-d="1" aria-label="Añadir otro">+</button></span>';
+  }
+  function syncShop() { if (!CAT) return; $$("[data-ctl]").forEach(function (el) { var p = CAT.productos.find(function (x) { return x.id === el.dataset.ctl; }); if (p) el.innerHTML = ctl(p); }); }
   function drawRewards() { $("#rw").innerHTML = CAT.recompensas.map(function (r) { return "<li><span>" + esc(r.nombre) + '</span><b>' + r.puntos + " pts</b></li>"; }).join(""); }
 
   /* ---------- pago de prueba (al estilo Stripe en modo test: no se cobra nada) ---------- */
@@ -117,7 +124,11 @@
 
   /* ---------- cesta ---------- */
   function cartN() { var n = 0; for (var k in cart) n += cart[k]; $$("[data-cart-n]").forEach(function (x) { x.textContent = n || ""; }); return n; }
-  function saveCart() { ls.set("mv_cesta", cart); cartN(); }
+  function saveCart() { ls.set("mv_cesta", cart); cartN(); syncShop(); }
+  document.addEventListener("click", function (e) {
+    var q = e.target.closest("[data-cq]"); if (!q) return;
+    var k = q.dataset.cq; cart[k] = (cart[k] || 0) + +q.dataset.d; if (cart[k] < 1) delete cart[k]; if (cart[k] > 10) cart[k] = 10; saveCart();
+  });
   document.addEventListener("click", function (e) {
     var b = e.target.closest("[data-add]"); if (!b || !CAT) return;
     var id = b.dataset.add; cart[id] = Math.min(10, (cart[id] || 0) + 1); saveCart();
