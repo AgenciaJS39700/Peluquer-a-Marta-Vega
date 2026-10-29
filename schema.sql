@@ -58,3 +58,21 @@ CREATE TABLE IF NOT EXISTS orders (
   status TEXT NOT NULL DEFAULT 'reservado',
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
+
+-- v2 (30/10/2026): pagos simulados, cumpleaños, restablecer contraseña, movimientos de tarjetas regalo
+ALTER TABLE users ADD COLUMN birthday TEXT;            -- MM-DD
+ALTER TABLE users ADD COLUMN bday_year INTEGER;        -- último año en que recibió el regalo
+ALTER TABLE gift_cards ADD COLUMN status TEXT NOT NULL DEFAULT 'pagada';
+ALTER TABLE gift_cards ADD COLUMN to_email TEXT;
+ALTER TABLE orders ADD COLUMN paid INTEGER NOT NULL DEFAULT 0;
+CREATE TABLE IF NOT EXISTS resets (token_hash TEXT PRIMARY KEY, user_id INTEGER NOT NULL, expires_at TEXT NOT NULL, used INTEGER NOT NULL DEFAULT 0);
+CREATE TABLE IF NOT EXISTS payments (
+  id TEXT PRIMARY KEY,            -- pi_demo_…
+  kind TEXT NOT NULL,             -- regalo | pedido
+  ref TEXT NOT NULL,              -- código de la tarjeta o del pedido
+  amount_c INTEGER NOT NULL,
+  status TEXT NOT NULL DEFAULT 'pendiente',  -- pendiente | pagado | rechazado
+  last4 TEXT, brand TEXT,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE TABLE IF NOT EXISTS gift_txn (id INTEGER PRIMARY KEY AUTOINCREMENT, code TEXT NOT NULL, delta_c INTEGER NOT NULL, note TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')));

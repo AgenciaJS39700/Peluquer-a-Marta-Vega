@@ -101,6 +101,18 @@
   </div>
 </section>
 
+<!-- ANTES Y DESPUÉS -->
+<section class="sec" id="antes" aria-labelledby="t-ba">
+  <div class="wrap">
+    <div class="head c rv"><span class="kick">Antes y después</span><h2 class="h2" id="t-ba">Desliza y <em>mira el cambio</em></h2><p class="lead">Transformaciones reales del salón. Arrastra la barra para comparar.</p></div>
+    <div class="bas">
+      <figure class="ba rv"><img src="img/antes1-m.webp" alt="Antes: pelo apagado con raíces" loading="lazy"><img class="af" src="img/despues1-m.webp" alt="Después: balayage miel con ondas" loading="lazy"><span class="bl a">Antes</span><span class="bl d">Después</span><input type="range" min="0" max="100" value="50" aria-label="Comparar antes y después del balayage"><figcaption>Balayage miel · 2 h 30</figcaption></figure>
+      <figure class="ba rv d1"><img src="img/antes2-m.webp" alt="Antes: pelo encrespado" loading="lazy"><img class="af" src="img/despues2-m.webp" alt="Después: pelo liso y brillante tras la keratina" loading="lazy"><span class="bl a">Antes</span><span class="bl d">Después</span><input type="range" min="0" max="100" value="50" aria-label="Comparar antes y después de la keratina"><figcaption>Keratina · adiós al encrespado</figcaption></figure>
+    </div>
+    <p class="note" style="text-align:center">Imágenes de ejemplo para esta maqueta. En la web real, fotos del salón con permiso de las clientas.</p>
+  </div>
+</section>
+
 <!-- PROBADOR -->
 <section class="sec" id="probador" aria-labelledby="t-prob">
   <div class="wrap prob">
@@ -156,6 +168,7 @@
       <p class="lead">Hazte socia gratis: <b>50 puntos de bienvenida</b> y 1 punto por cada euro en servicios, productos y tarjetas regalo. Invita a una amiga y ganáis 75 puntos cada una.</p>
       <div class="tiers"><div class="tier"><b>Rosa</b><small>Desde 0 puntos</small></div><div class="tier"><b>Champán</b><small>400 pts · +10 % y regalo de cumpleaños</small></div><div class="tier"><b>Oro</b><small>1000 pts · +25 % y cita prioritaria</small></div></div>
       <ul class="rw" id="rw"></ul>
+      <div class="sorteo" id="sorteo"></div>
       <div class="prow" id="club-cta"><button class="btn gold" type="button" data-auth="registro">Únete gratis · +50 puntos</button><button class="btn" type="button" data-auth="entrar">Ya soy socia</button></div>
     </div>
     <div class="mcard-w rv d1">
@@ -187,9 +200,10 @@
         <div class="fld"><span class="lbl2">Diseño</span><div class="chips" id="g-dis" role="group" aria-label="Diseño"></div></div>
         <div class="row2"><div class="fld"><label for="g-para">Para</label><input class="inp" id="g-para" maxlength="40" autocomplete="off" required></div><div class="fld"><label for="g-de">De</label><input class="inp" id="g-de" maxlength="40" autocomplete="name" required></div></div>
         <div class="fld"><label for="g-msg">Mensaje (opcional)</label><textarea class="inp" id="g-msg" maxlength="160" placeholder="Para que te mimes un poco."></textarea></div>
+        <div class="fld"><label for="g-mail">Enviársela por correo (opcional)</label><input class="inp" id="g-mail" type="email" inputmode="email" maxlength="254" placeholder="correo de la persona" autocomplete="off"></div>
         <p class="err" id="g-err" role="alert"></p>
         <button class="btn gold full" type="submit"><svg class="ico"><use href="#i-gift"/></svg><span id="g-btn">Comprar tarjeta de 50 €</span></button>
-        <p class="demo">Pago de demostración: no se realiza ningún cobro. Si tienes cuenta en el club, suma puntos.</p>
+        <p class="demo">Pago con tarjeta en modo de prueba (no se cobra nada). Si tienes cuenta en el club, suma puntos.</p>
       </form>
       <div id="g-ok" hidden></div>
       <div class="fld" style="margin-top:1.4rem"><span class="lbl2">¿Te han regalado una? Consulta el saldo</span><form class="saldo" id="fsaldo"><input class="inp" id="s-cod" placeholder="MVR-XXXXXX" maxlength="10" autocapitalize="characters" aria-label="Código de la tarjeta"><button class="btn sm" type="submit">Consultar</button></form><p class="err" id="s-out" role="status"></p></div>
@@ -241,7 +255,9 @@
       <details><summary>¿Las tarjetas regalo caducan?</summary><p>Tienen un año de validez desde la compra y se pueden gastar en varias visitas. El saldo se consulta aquí mismo con el código.</p></details>
       <details><summary>¿Cómo funciona el probador de color?</summary><p>Detecta tu pelo en la foto o en la cámara y aplica el tono elegido. Todo ocurre en tu móvil, la imagen no se envía a ningún sitio.</p></details>
       <details><summary>¿Puedo cancelar o cambiar mi cita?</summary><p>Sí, con 24 h de antelación, con el código de tu cita o por WhatsApp.</p></details>
-      <details><summary>¿Qué formas de pago aceptáis?</summary><p>Tarjeta, efectivo y Bizum. Los productos de la tienda se pagan al recogerlos en el salón.</p></details>
+      <details><summary>¿Qué formas de pago aceptáis?</summary><p>En el salón: tarjeta, efectivo y Bizum. En la web puedes pagar con tarjeta las tarjetas regalo y la tienda, o reservar los productos y pagarlos al recogerlos.</p></details>
+      <details><summary>¿Me avisáis de mi cita?</summary><p>Sí: te llega la confirmación al reservar y un recordatorio el día antes. Y cuando te toque el retoque (por ejemplo, 6 semanas después del color), te avisamos para que no se te pase.</p></details>
+      <details><summary>¿Qué es el sorteo del mes?</summary><p>Cada mes sorteamos un balayage con ritual spa entre las socias. Ser socia te da 1 participación, y sumas más con cada 50 puntos y con cada amiga que invites.</p></details>
       <p class="ask"><button class="btn" type="button" data-pedir-cita><svg class="ico"><use href="#i-chat"/></svg>Pregúntale al asistente</button></p>
     </div>
   </div>
@@ -271,7 +287,7 @@
   <div class="wrap">
     <div class="g">
       <div><a class="logo" href="#inicio"><img src="icon-192.png" alt="" width="38" height="38" loading="lazy"><span><b>Marta Vega</b><small>Peluquería de autor</small></span></a><p style="margin-top:1rem;max-width:40ch">Un espacio para cuidarte. Escuchamos, asesoramos y trabajamos con productos de alta gama.</p><button class="btn sm inst" type="button" id="btn-inst" style="margin-top:1rem">📲 Instalar la app</button></div>
-      <div><h4>El salón</h4><ul><li><a href="#servicios">Servicios</a></li><li><a href="#probador">Probador de color</a></li><li><a href="#club">Club de puntos</a></li><li><a href="#regalo">Tarjeta regalo</a></li><li><a href="#tienda">Tienda</a></li></ul></div>
+      <div><h4>El salón</h4><ul><li><a href="#servicios">Servicios</a></li><li><a href="#probador">Probador de color</a></li><li><a href="#club">Club de puntos</a></li><li><a href="#regalo">Tarjeta regalo</a></li><li><a href="#tienda">Tienda</a></li><li><a href="panel">Acceso del salón</a></li></ul></div>
       <div><h4>Contacto</h4><ul><li>C/ de la Luna, 9 · Villanueva del Mar</li><li><a href="tel:+34628224719">628 22 47 19</a></li><li><a href="mailto:info@agencia-js.com">info@agencia-js.com</a></li></ul></div>
     </div>
     <div class="lg"><span>© 2026 Salón Marta Vega.</span><span>Maqueta de demostración con datos ficticios.</span><span>Diseño web por <a href="https://agencia-js.com/?utm_source=demo-marta-vega" rel="noopener">Agencia JS</a></span></div>
@@ -294,6 +310,11 @@
   <div class="grab"></div>
   <div class="dr-h"><h2 id="dc-t">Club Marta Vega</h2><button class="x" type="button" data-close aria-label="Cerrar">×</button></div>
   <div class="dr-b" id="dc-b"></div>
+</aside>
+<aside class="dr" id="dr-pago" role="dialog" aria-modal="true" aria-labelledby="dp-t" aria-hidden="true">
+  <div class="grab"></div>
+  <div class="dr-h"><h2 id="dp-t">Pago seguro</h2><button class="x" type="button" data-close aria-label="Cerrar">×</button></div>
+  <div class="dr-b" id="dp-b"></div>
 </aside>
 <aside class="dr" id="dr-cesta" role="dialog" aria-modal="true" aria-labelledby="dk-t" aria-hidden="true">
   <div class="grab"></div>

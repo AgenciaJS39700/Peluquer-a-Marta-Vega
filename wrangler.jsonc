@@ -4,6 +4,6 @@
   "compatibility_date": "2026-01-01",
   "assets": { "directory": "./public", "binding": "ASSETS", "run_worker_first": ["/api/*"] },
   "d1_databases": [{ "binding": "DB", "database_name": "marta-vega", "database_id": "6e166fa3-d3b8-48da-a57f-86bd3af2b6a9" }],
-  "triggers": { "crons": ["17 4 * * *"] },
+  "triggers": { "crons": ["17 7 * * *"] },
   "observability": { "enabled": true }
 }

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Panel del salón · Marta Vega</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0d0a0b">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="styles.css">
+<style>
+body{padding-bottom:2rem}
+.pw{width:min(960px,100% - 32px);margin:0 auto;padding:1.4rem 0 3rem}
+.ph{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.4rem}
+.ph h1{font:400 1.6rem/1.1 var(--serif)}
+.ph h1 small{display:block;font:700 .7rem var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:.7rem;margin-bottom:1.4rem}
+@media(min-width:760px){.kpis{grid-template-columns:repeat(4,1fr)}}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--rs);padding:1rem}
+.kpi b{display:block;font:400 1.8rem/1 var(--serif);color:var(--gold2)}.kpi span{font-size:.8rem;color:var(--mute)}
+.box{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:1.2rem;margin-bottom:1.1rem}
+.box h2{font:400 1.25rem var(--serif);margin-bottom:.8rem}
+.scan{display:grid;gap:.6rem}
+@media(min-width:620px){.scan{grid-template-columns:1fr auto auto}}
+#vid{width:100%;max-height:320px;object-fit:cover;border-radius:var(--rs);margin-top:.8rem;display:none;background:#000}
+.res{margin-top:1rem}
+.res:empty{display:none}
+.mb{display:grid;gap:.8rem;padding:1rem;border-radius:var(--rs);background:var(--bg2);border:1px solid var(--line)}
+.mb .t{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start}
+.mb .t b{font:400 1.3rem var(--serif)}.mb .t span{color:var(--gold2);font-weight:800}
+.ord{display:grid;gap:.5rem}
+.ord .o{display:grid;grid-template-columns:1fr auto;gap:.4rem .8rem;padding:.8rem;border-radius:12px;background:var(--bg2);font-size:.86rem}
+.ord .o small{color:var(--soft)}
+.stx{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;padding:.2rem .5rem;border-radius:999px;background:var(--chip)}
+.stx.pagado{background:rgba(111,207,151,.18);color:var(--ok)}
+.login{max-width:420px;margin:12vh auto 0}
+@media(min-width:620px){.scan.scan3{grid-template-columns:1fr 1.4fr auto}}
+@media(max-width:619px){.ord .o{grid-template-columns:1fr}.ord .o>span:last-child{justify-items:start!important}}
+</style>
+</head>
+<body>
+<main class="pw" id="app">
+  <form class="box login form" id="flog" novalidate>
+    <div class="ph" style="margin:0"><h1><small>Salón Marta Vega</small>Panel del salón</h1></div>
+    <p class="lead" style="font-size:.95rem">Suma puntos al cobrar, canjea premios, cobra tarjetas regalo y prepara los pedidos de la tienda.</p>
+    <div class="fld"><label for="k">Clave del salón</label><input class="inp" id="k" type="password" autocomplete="current-password" required></div>
+    <p class="err" id="kerr" role="alert"></p>
+    <button class="btn gold full" type="submit">Entrar</button>
+    <p class="demo">Demo: la clave es <b>demo-martavega</b>.</p>
+  </form>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="panel.js" defer></script>
+</body>
+</html>

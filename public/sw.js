@@ -1,7 +1,7 @@
 /* /public/sw.js — Modo app (PWA) del Salón Marta Vega.
    Páginas, código y catálogo: primero la red y, sin conexión, la copia guardada. Imágenes y fuentes: primero la copia.
    La API (/api/) nunca pasa por la caché. Sube VERSION al publicar cambios grandes. */
-var VERSION = "mv-v2";
+var VERSION = "mv-v3";
 var CORE = ["./", "index.html", "styles.css", "app.js", "hilos.js", "probador.js", "qr.js", "catalogo.json", "manifest.webmanifest", "icon-192.png", "fonts/fraunces.woff", "fonts/manrope.woff", "img/salon-m.webp"];
 self.addEventListener("install", function (e) {
   e.waitUntil(caches.open(VERSION).then(function (c) { return c.addAll(CORE); }).catch(function () {}).then(function () { return self.skipWaiting(); }));

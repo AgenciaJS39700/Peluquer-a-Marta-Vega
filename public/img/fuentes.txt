@@ -18,3 +18,8 @@ modelo https://d8j0ntlcm91z4.cloudfront.net/user_3KCXHxLegiA18O8VhrE2rEMT3uS/hf_
 herramientas https://d8j0ntlcm91z4.cloudfront.net/user_3KCXHxLegiA18O8VhrE2rEMT3uS/hf_20261029_183345_4fd59270-2895-41f1-b42d-d773fdbde697.png
 peinado https://d8j0ntlcm91z4.cloudfront.net/user_3KCXHxLegiA18O8VhrE2rEMT3uS/hf_20261029_183345_60716e1d-5ca9-48bf-b343-3f954e8c39e0.png
 brushing https://d8j0ntlcm91z4.cloudfront.net/user_3KCXHxLegiA18O8VhrE2rEMT3uS/hf_20261029_190742_3d9c05e8-3c59-4b31-91ac-7ea2431b83b6.png
+antes1 https://d8j0ntlcm91z4.cloudfront.net/user_3KCXHxLegiA18O8VhrE2rEMT3uS/hf_20261029_191943_cb1e0718-73f2-481b-850b-682e3fed290d.png
+despues1 https://d8j0ntlcm91z4.cloudfront.net/user_3KCXHxLegiA18O8VhrE2rEMT3uS/hf_20261029_192104_13f81908-ad47-44b6-ba1e-e83cccac6579.png
+antes2 https://d8j0ntlcm91z4.cloudfront.net/user_3KCXHxLegiA18O8VhrE2rEMT3uS/hf_20261029_191942_02cd92a7-70c1-49b0-b60d-f531607f2d28.png
+despues2 https://d8j0ntlcm91z4.cloudfront.net/user_3KCXHxLegiA18O8VhrE2rEMT3uS/hf_20261029_192105_67021125-1986-4fd9-95e1-ff7639a37ed8.png
+clinica https://d8j0ntlcm91z4.cloudfront.net/user_3KCXHxLegiA18O8VhrE2rEMT3uS/hf_20261029_191942_52edb769-5b10-4ad2-b5f3-6becb222de73.png

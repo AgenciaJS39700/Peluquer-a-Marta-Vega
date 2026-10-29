@@ -5,46 +5,248 @@
     "whatsapp": "34628224719",
     "email": "info@agencia-js.com",
     "direccion": "C/ de la Luna, 9 · Villanueva del Mar",
-    "horario": [["Lunes", "Cerrado"], ["Martes", "10:00–14:00 · 16:00–20:30"], ["Miércoles", "10:00–14:00 · 16:00–20:30"], ["Jueves", "10:00–14:00 · 16:00–20:30"], ["Viernes", "10:00–14:00 · 16:00–20:30"], ["Sábado", "09:00–15:00"], ["Domingo", "Cerrado"]]
-  },
-  "servicios": [
-    { "id": "corte-mujer", "cat": "corte", "nombre": "Corte mujer", "desc": "Lavado, corte y peinado a medida de tu rostro.", "precio": 35, "img": "bob", "tag": "Más reservado" },
-    { "id": "brushing", "cat": "corte", "nombre": "Brushing y ondas", "desc": "Lavado y secado con volumen y movimiento.", "precio": 22, "img": "brushing" },
-    { "id": "babylights", "cat": "color", "nombre": "Babylights / raíz", "desc": "Mechas finas o retoque de raíz con brillo.", "precio": 45, "img": "balayage-proceso" },
-    { "id": "color", "cat": "color", "nombre": "Color completo", "desc": "Tinte con tratamiento protector y brillo.", "precio": 55, "img": "cobrizo" },
-    { "id": "balayage", "cat": "color", "nombre": "Balayage / mechas", "desc": "Técnica a mano alzada, tono personalizado.", "precio": 95, "img": "balayage", "tag": "Estrella" },
-    { "id": "keratina", "cat": "tratamiento", "nombre": "Keratina", "desc": "Alisado y brillo espejo hasta 3 meses.", "precio": 70, "img": "keratina" },
-    { "id": "ritual", "cat": "tratamiento", "nombre": "Ritual spa capilar", "desc": "Lavado relajante, masaje craneal y nutrición.", "precio": 28, "img": "lavado" },
-    { "id": "evento", "cat": "belleza", "nombre": "Peinado de evento", "desc": "Recogidos y ondas, con prueba previa.", "precio": 40, "img": "peinado" },
-    { "id": "novia", "cat": "belleza", "nombre": "Novias", "desc": "Prueba, peinado y maquillaje el gran día.", "precio": 180, "img": "novia" },
-    { "id": "manicura", "cat": "belleza", "nombre": "Manicura semipermanente", "desc": "Esmaltado de larga duración.", "precio": 22, "img": "manicura" }
-  ],
-  "productos": [
-    { "id": "pack-ritual", "tipo": "producto", "nombre": "Ritual de brillo", "desc": "Champú, acondicionador y aceite sin sulfatos.", "precio": 49, "img": "productos", "tag": "Pack" },
-    { "id": "aceite", "tipo": "producto", "nombre": "Aceite sérum 50 ml", "desc": "Puntas selladas y brillo sin peso.", "precio": 24, "img": "productos" },
-    { "id": "kit-peinado", "tipo": "producto", "nombre": "Kit de peinado", "desc": "Cepillo de madera, peine, tijera y scrunchies de seda.", "precio": 39, "img": "herramientas" },
-    { "id": "tote", "tipo": "merch", "nombre": "Tote bag MV", "desc": "Algodón orgánico negro con monograma dorado.", "precio": 18, "img": "tote", "tag": "Merch" },
-    { "id": "vela", "tipo": "merch", "nombre": "Vela + toalla MV", "desc": "El olor del salón en casa y toalla bordada.", "precio": 32, "img": "vela", "tag": "Merch" }
-  ],
-  "recompensas": [
-    { "id": "desc5", "puntos": 100, "nombre": "5 € de descuento", "desc": "En cualquier servicio." },
-    { "id": "ritual", "puntos": 250, "nombre": "Ritual spa capilar gratis", "desc": "Masaje craneal y nutrición." },
-    { "id": "color15", "puntos": 400, "nombre": "15 % en color o balayage", "desc": "Tu próximo cambio de look." },
-    { "id": "corte", "puntos": 600, "nombre": "Corte y peinado gratis", "desc": "Para ti o para regalar." }
-  ],
-  "niveles": [
-    { "id": "rosa", "nombre": "Rosa", "desde": 0, "ventaja": "1 punto por cada euro" },
-    { "id": "champan", "nombre": "Champán", "desde": 400, "ventaja": "+10 % de puntos y regalo de cumpleaños" },
-    { "id": "oro", "nombre": "Oro", "desde": 1000, "ventaja": "+25 % de puntos y cita prioritaria" }
-  ],
-  "regalo": {
-    "importes": [25, 50, 75, 100, 150],
-    "disenos": [
-      { "id": "noir", "nombre": "Noir" },
-      { "id": "rosa", "nombre": "Rosa empolvado" },
-      { "id": "navidad", "nombre": "Navidad glam" }
+    "horario": [
+      [
+        "Lunes",
+        "Cerrado"
+      ],
+      [
+        "Martes",
+        "10:00–14:00 · 16:00–20:30"
+      ],
+      [
+        "Miércoles",
+        "10:00–14:00 · 16:00–20:30"
+      ],
+      [
+        "Jueves",
+        "10:00–14:00 · 16:00–20:30"
+      ],
+      [
+        "Viernes",
+        "10:00–14:00 · 16:00–20:30"
+      ],
+      [
+        "Sábado",
+        "09:00–15:00"
+      ],
+      [
+        "Domingo",
+        "Cerrado"
+      ]
     ]
   },
-  "club": { "bienvenida": 50, "amiga": 75, "visitaDemo": 35 },
-  "campana": { "titulo": "Navidad Glam", "codigo": "GLAM15", "texto": "15 % en color, balayage y peinados de fiesta", "hasta": "2026-12-31T23:59:59+01:00" }
+  "servicios": [
+    {
+      "id": "corte-mujer",
+      "cat": "corte",
+      "nombre": "Corte mujer",
+      "desc": "Lavado, corte y peinado a medida de tu rostro.",
+      "precio": 35,
+      "img": "bob",
+      "tag": "Más reservado"
+    },
+    {
+      "id": "brushing",
+      "cat": "corte",
+      "nombre": "Brushing y ondas",
+      "desc": "Lavado y secado con volumen y movimiento.",
+      "precio": 22,
+      "img": "brushing"
+    },
+    {
+      "id": "babylights",
+      "cat": "color",
+      "nombre": "Babylights / raíz",
+      "desc": "Mechas finas o retoque de raíz con brillo.",
+      "precio": 45,
+      "img": "balayage-proceso"
+    },
+    {
+      "id": "color",
+      "cat": "color",
+      "nombre": "Color completo",
+      "desc": "Tinte con tratamiento protector y brillo.",
+      "precio": 55,
+      "img": "cobrizo"
+    },
+    {
+      "id": "balayage",
+      "cat": "color",
+      "nombre": "Balayage / mechas",
+      "desc": "Técnica a mano alzada, tono personalizado.",
+      "precio": 95,
+      "img": "balayage",
+      "tag": "Estrella"
+    },
+    {
+      "id": "keratina",
+      "cat": "tratamiento",
+      "nombre": "Keratina",
+      "desc": "Alisado y brillo espejo hasta 3 meses.",
+      "precio": 70,
+      "img": "keratina"
+    },
+    {
+      "id": "ritual",
+      "cat": "tratamiento",
+      "nombre": "Ritual spa capilar",
+      "desc": "Lavado relajante, masaje craneal y nutrición.",
+      "precio": 28,
+      "img": "lavado"
+    },
+    {
+      "id": "evento",
+      "cat": "belleza",
+      "nombre": "Peinado de evento",
+      "desc": "Recogidos y ondas, con prueba previa.",
+      "precio": 40,
+      "img": "peinado"
+    },
+    {
+      "id": "novia",
+      "cat": "belleza",
+      "nombre": "Novias",
+      "desc": "Prueba, peinado y maquillaje el gran día.",
+      "precio": 180,
+      "img": "novia"
+    },
+    {
+      "id": "manicura",
+      "cat": "belleza",
+      "nombre": "Manicura semipermanente",
+      "desc": "Esmaltado de larga duración.",
+      "precio": 22,
+      "img": "manicura"
+    }
+  ],
+  "productos": [
+    {
+      "id": "pack-ritual",
+      "tipo": "producto",
+      "nombre": "Ritual de brillo",
+      "desc": "Champú, acondicionador y aceite sin sulfatos.",
+      "precio": 49,
+      "img": "productos",
+      "tag": "Pack"
+    },
+    {
+      "id": "aceite",
+      "tipo": "producto",
+      "nombre": "Aceite sérum 50 ml",
+      "desc": "Puntas selladas y brillo sin peso.",
+      "precio": 24,
+      "img": "productos"
+    },
+    {
+      "id": "kit-peinado",
+      "tipo": "producto",
+      "nombre": "Kit de peinado",
+      "desc": "Cepillo de madera, peine, tijera y scrunchies de seda.",
+      "precio": 39,
+      "img": "herramientas"
+    },
+    {
+      "id": "tote",
+      "tipo": "merch",
+      "nombre": "Tote bag MV",
+      "desc": "Algodón orgánico negro con monograma dorado.",
+      "precio": 18,
+      "img": "tote",
+      "tag": "Merch"
+    },
+    {
+      "id": "vela",
+      "tipo": "merch",
+      "nombre": "Vela + toalla MV",
+      "desc": "El olor del salón en casa y toalla bordada.",
+      "precio": 32,
+      "img": "vela",
+      "tag": "Merch"
+    }
+  ],
+  "recompensas": [
+    {
+      "id": "desc5",
+      "puntos": 100,
+      "nombre": "5 € de descuento",
+      "desc": "En cualquier servicio."
+    },
+    {
+      "id": "ritual",
+      "puntos": 250,
+      "nombre": "Ritual spa capilar gratis",
+      "desc": "Masaje craneal y nutrición."
+    },
+    {
+      "id": "color15",
+      "puntos": 400,
+      "nombre": "15 % en color o balayage",
+      "desc": "Tu próximo cambio de look."
+    },
+    {
+      "id": "corte",
+      "puntos": 600,
+      "nombre": "Corte y peinado gratis",
+      "desc": "Para ti o para regalar."
+    }
+  ],
+  "niveles": [
+    {
+      "id": "rosa",
+      "nombre": "Rosa",
+      "desde": 0,
+      "ventaja": "1 punto por cada euro"
+    },
+    {
+      "id": "champan",
+      "nombre": "Champán",
+      "desde": 400,
+      "ventaja": "+10 % de puntos y regalo de cumpleaños"
+    },
+    {
+      "id": "oro",
+      "nombre": "Oro",
+      "desde": 1000,
+      "ventaja": "+25 % de puntos y cita prioritaria"
+    }
+  ],
+  "regalo": {
+    "importes": [
+      25,
+      50,
+      75,
+      100,
+      150
+    ],
+    "disenos": [
+      {
+        "id": "noir",
+        "nombre": "Noir"
+      },
+      {
+        "id": "rosa",
+        "nombre": "Rosa empolvado"
+      },
+      {
+        "id": "navidad",
+        "nombre": "Navidad glam"
+      }
+    ]
+  },
+  "club": {
+    "bienvenida": 50,
+    "amiga": 75,
+    "visitaDemo": 35,
+    "cumple": 25
+  },
+  "campana": {
+    "titulo": "Navidad Glam",
+    "codigo": "GLAM15",
+    "texto": "15 % en color, balayage y peinados de fiesta",
+    "hasta": "2026-12-31T23:59:59+01:00"
+  },
+  "sorteo": {
+    "premio": "Balayage + ritual spa capilar (valor 125 €)"
+  }
 }

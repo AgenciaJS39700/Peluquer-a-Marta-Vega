@@ -90,6 +90,31 @@
   }
   function drawRewards() { $("#rw").innerHTML = CAT.recompensas.map(function (r) { return "<li><span>" + esc(r.nombre) + '</span><b>' + r.puntos + " pts</b></li>"; }).join(""); }
 
+  /* ---------- pago de prueba (al estilo Stripe en modo test: no se cobra nada) ---------- */
+  var payCb = null;
+  function checkout(pago, titulo, cb) {
+    payCb = cb;
+    $("#dp-t").textContent = "Pago seguro";
+    $("#dp-b").innerHTML = '<div class="pay-top"><span>' + esc(titulo) + '</span><b>' + eur(pago.importe) + '</b></div>' +
+      '<div class="test"><b>Modo de prueba</b> · no se cobra nada. Usa una tarjeta de prueba:<div class="chips"><button class="chip" type="button" data-tc="4242 4242 4242 4242">✓ 4242 4242 4242 4242</button><button class="chip" type="button" data-tc="4000 0000 0000 0002">✗ Rechazada</button><button class="chip" type="button" data-tc="4000 0000 0000 9995">✗ Sin fondos</button></div></div>' +
+      '<form class="form" id="fpay" novalidate autocomplete="off"><div class="fld"><label for="pc-n">Número de tarjeta</label><div class="cardin"><input class="inp" id="pc-n" inputmode="numeric" maxlength="19" placeholder="1234 1234 1234 1234" autocomplete="off"><span id="pc-brand"></span></div></div>' +
+      '<div class="row2"><div class="fld"><label for="pc-e">Caducidad</label><input class="inp" id="pc-e" inputmode="numeric" maxlength="5" placeholder="MM/AA" autocomplete="off"></div><div class="fld"><label for="pc-c">CVC</label><input class="inp" id="pc-c" inputmode="numeric" maxlength="4" placeholder="123" autocomplete="off"></div></div>' +
+      '<div class="fld"><label for="pc-h">Titular</label><input class="inp" id="pc-h" maxlength="60" autocomplete="off"></div>' +
+      '<p class="err" id="pc-err" role="alert"></p><button class="btn gold full" type="submit">🔒 Pagar ' + eur(pago.importe) + '</button>' +
+      '<p class="demo">Pasarela de demostración preparada para Stripe: en la web real se conecta tu cuenta y el cobro va directo a tu banco. Los datos de tarjeta nunca se guardan.</p></form>';
+    var n = $("#pc-n"), ex = $("#pc-e");
+    n.addEventListener("input", function () { var v = n.value.replace(/\D/g, "").slice(0, 16); n.value = v.replace(/(.{4})/g, "$1 ").trim(); $("#pc-brand").textContent = /^4/.test(v) ? "VISA" : /^5[1-5]/.test(v) ? "MASTERCARD" : ""; });
+    ex.addEventListener("input", function () { var v = ex.value.replace(/\D/g, "").slice(0, 4); ex.value = v.length > 2 ? v.slice(0, 2) + "/" + v.slice(2) : v; });
+    $$("[data-tc]", $("#dp-b")).forEach(function (b) { b.addEventListener("click", function () { n.value = b.dataset.tc; n.dispatchEvent(new Event("input")); var d = new Date(); ex.value = "12/" + String((d.getFullYear() + 3) % 100); $("#pc-c").value = "123"; if (!$("#pc-h").value) $("#pc-h").value = (YO && YO.usuario && YO.usuario.nombre) || "Prueba"; }); });
+    $("#fpay").addEventListener("submit", function (e) {
+      e.preventDefault(); var er = $("#pc-err"), btn = e.target.querySelector("button[type=submit]"); er.textContent = ""; btn.disabled = true; btn.textContent = "Procesando…";
+      api("pago", { id: pago.id, tarjeta: n.value, caducidad: ex.value, cvc: $("#pc-c").value, titular: $("#pc-h").value })
+        .then(function (d) { closeDr(); var f = payCb; payCb = null; if (f) f(d); if (YO) loadYo(); })
+        .catch(function (x) { er.textContent = x.message; btn.disabled = false; btn.textContent = "🔒 Pagar " + eur(pago.importe); });
+    });
+    openDr("pago");
+  }
+
   /* ---------- cesta ---------- */
   function cartN() { var n = 0; for (var k in cart) n += cart[k]; $$("[data-cart-n]").forEach(function (x) { x.textContent = n || ""; }); return n; }
   function saveCart() { ls.set("mv_cesta", cart); cartN(); }
@@ -102,19 +127,24 @@
   function drawCart(done) {
     var b = $("#dk-b");
     if (done) {
-      b.innerHTML = '<div class="ok-box"><b>¡Reservado!</b><p>Tu código de recogida es</p><div class="cd">' + esc(done.codigo) + "</div><p>Total a pagar en el salón: <b>" + eur(done.total) + "</b>." + (done.puntos ? " Sumarás " + done.puntos + " puntos al pagar." : " Si te haces socia, sumarás puntos con esta compra.") + '</p><a class="btn gold" target="_blank" rel="noopener" href="https://wa.me/34628224719?text=' + encodeURIComponent("Hola, he reservado productos en la web. Código " + done.codigo) + '">Avisar por WhatsApp</a></div>';
+      b.innerHTML = '<div class="ok-box"><b>' + (done.pagado ? "¡Pagado! ✓" : "¡Reservado!") + '</b><p>Tu código de recogida es</p><div class="cd">' + esc(done.codigo) + "</div><p>" + (done.pagado ? "Pagado con tarjeta ···· " + esc(done.last4) + " (" + eur(done.total) + "). Solo tienes que recogerlo." + (done.puntos ? " Has sumado <b>" + done.puntos + " puntos</b>." : "") : "Total a pagar en el salón: <b>" + eur(done.total) + "</b>." + (done.puntos ? " Sumarás " + done.puntos + " puntos al pagar." : " Si te haces socia, sumarás puntos con esta compra.")) + '</p><a class="btn gold" target="_blank" rel="noopener" href="https://wa.me/34628224719?text=' + encodeURIComponent("Hola, he reservado productos en la web. Código " + done.codigo) + '">Avisar por WhatsApp</a></div>';
       return;
     }
     var ids = Object.keys(cart).filter(function (k) { return CAT.productos.some(function (p) { return p.id === k; }); });
     if (!ids.length) { b.innerHTML = '<p class="lead">Tu cesta está vacía.</p><a class="btn gold" href="#tienda" data-close style="margin-top:1rem">Ver la tienda</a>'; return; }
     var tot = 0;
     var rows = ids.map(function (k) { var p = CAT.productos.find(function (x) { return x.id === k; }); tot += p.precio * cart[k]; return '<div class="ci">' + pic(p.img, "") + "<div><b>" + esc(p.nombre) + "</b><small>" + eur(p.precio) + '</small></div><div class="qty"><button type="button" data-q="' + k + '" data-d="-1" aria-label="Quitar uno">−</button><span>' + cart[k] + '</span><button type="button" data-q="' + k + '" data-d="1" aria-label="Añadir uno">+</button></div></div>'; }).join("");
-    b.innerHTML = '<div class="cl">' + rows + '</div><div class="tot"><span>Total</span><span>' + eur(tot) + '</span></div><form class="form" id="fpedido" novalidate><div class="row2"><div class="fld"><label for="pd-n">Nombre</label><input class="inp" id="pd-n" autocomplete="name" maxlength="60" value="' + esc(YO && YO.usuario ? YO.usuario.nombre : "") + '"></div><div class="fld"><label for="pd-t">Teléfono</label><input class="inp" id="pd-t" type="tel" inputmode="tel" autocomplete="tel" maxlength="16"></div></div><p class="err" id="pd-err" role="alert"></p><button class="btn gold full" type="submit">Reservar y recoger en el salón</button><p class="demo">Se paga al recogerlo. Te lo guardamos 7 días.</p></form>';
+    b.innerHTML = '<div class="cl">' + rows + '</div><div class="tot"><span>Total</span><span>' + eur(tot) + '</span></div><form class="form" id="fpedido" novalidate><div class="row2"><div class="fld"><label for="pd-n">Nombre</label><input class="inp" id="pd-n" autocomplete="name" maxlength="60" value="' + esc(YO && YO.usuario ? YO.usuario.nombre : "") + '"></div><div class="fld"><label for="pd-t">Teléfono</label><input class="inp" id="pd-t" type="tel" inputmode="tel" autocomplete="tel" maxlength="16"></div></div><div class="fld"><span class="lbl2">¿Cómo quieres pagar?</span><div class="opt2"><label><input type="radio" name="pd-p" value="online" checked><span><b>Pagar ahora con tarjeta</b><small>Lo recoges sin esperas</small></span></label><label><input type="radio" name="pd-p" value="salon"><span><b>Pagar al recoger</b><small>En el salón, te lo guardamos 7 días</small></span></label></div></div><p class="err" id="pd-err" role="alert"></p><button class="btn gold full" type="submit">Continuar</button></form>';
     $("#fpedido").addEventListener("submit", function (e) {
       e.preventDefault(); var er = $("#pd-err"); er.textContent = "";
       var btn = e.target.querySelector("button[type=submit]"); btn.disabled = true;
-      api("pedido", { nombre: $("#pd-n").value, telefono: $("#pd-t").value, items: ids.map(function (k) { return { id: k, q: cart[k] }; }) })
-        .then(function (d) { cart = {}; saveCart(); drawCart(d); if (YO) loadYo(); })
+      var modo = (e.target.querySelector("[name=pd-p]:checked") || {}).value || "salon";
+      api("pedido", { nombre: $("#pd-n").value, telefono: $("#pd-t").value, pago: modo, items: ids.map(function (k) { return { id: k, q: cart[k] }; }) })
+        .then(function (d) {
+          cart = {}; saveCart();
+          if (d.pago) checkout(d.pago, "Pedido " + d.codigo, function (r) { drawCart({ codigo: d.codigo, total: d.total, pagado: true, last4: r.last4, puntos: r.puntos }); openDr("cesta"); toast("Pago completado ✓"); });
+          else { drawCart(d); if (YO) loadYo(); }
+        })
         .catch(function (x) { er.textContent = x.message; btn.disabled = false; });
     });
   }
@@ -147,18 +177,42 @@
       (modo === "registro" ? '<div class="fld"><label for="a-n">Nombre</label><input class="inp" id="a-n" autocomplete="name" maxlength="60" required></div>' : "") +
       '<div class="fld"><label for="a-e">Correo</label><input class="inp" id="a-e" type="email" inputmode="email" autocomplete="email" maxlength="254" required></div>' +
       '<div class="fld"><label for="a-p">Contraseña</label><input class="inp" id="a-p" type="password" autocomplete="' + (modo === "registro" ? "new-password" : "current-password") + '" minlength="8" maxlength="128" required>' + (modo === "registro" ? '<small style="color:var(--soft);font-size:.78rem">Mínimo 8 caracteres.</small>' : "") + "</div>" +
-      (modo === "registro" ? '<div class="fld"><label for="a-t">Teléfono (opcional)</label><input class="inp" id="a-t" type="tel" inputmode="tel" autocomplete="tel" maxlength="16"></div><div class="fld"><label for="a-a">Código de una amiga (opcional)</label><input class="inp" id="a-a" maxlength="8" autocapitalize="characters" value="' + esc(amiga) + '"></div><label class="chk"><input type="checkbox" id="a-ok"> <span>Acepto la política de privacidad: mis datos solo se usan para el club y mis citas.</span></label><label class="chk"><input type="checkbox" id="a-nov"> <span>Quiero recibir novedades y promociones (opcional).</span></label>' : "") +
+      (modo === "registro" ? '<div class="fld"><label for="a-t">Teléfono (opcional)</label><input class="inp" id="a-t" type="tel" inputmode="tel" autocomplete="tel" maxlength="16"></div><div class="fld"><span class="lbl2">Tu cumpleaños (opcional, ¡hay regalo!)</span><div class="row2" style="grid-template-columns:1fr 1.4fr">' + selDia("a-d") + selMes("a-m") + '</div></div><div class="fld"><label for="a-a">Código de una amiga (opcional)</label><input class="inp" id="a-a" maxlength="8" autocapitalize="characters" value="' + esc(amiga) + '"></div><label class="chk"><input type="checkbox" id="a-ok"> <span>Acepto la política de privacidad: mis datos solo se usan para el club y mis citas.</span></label><label class="chk"><input type="checkbox" id="a-nov"> <span>Quiero recibir novedades y promociones (opcional).</span></label>' : "") +
       '<p class="err" id="a-err" role="alert"></p><button class="btn gold full" type="submit">' + (modo === "registro" ? "Crear mi cuenta" : "Entrar") + "</button>" +
-      (modo === "entrar" ? '<p class="demo">¿Has olvidado la contraseña? Escríbenos por WhatsApp y te ayudamos.</p>' : '<p class="demo">Maqueta de demostración: puedes crear una cuenta de prueba.</p>') + "</form>";
+      (modo === "entrar" ? '<p class="demo"><button class="lnk2" type="button" id="a-olv">¿Has olvidado la contraseña?</button></p>' : '<p class="demo">Maqueta de demostración: puedes crear una cuenta de prueba.</p>') + "</form>";
     $$("[data-m]", $("#dc-b")).forEach(function (b) { b.addEventListener("click", function () { authView(b.dataset.m); }); });
+    var ol = $("#a-olv"); if (ol) ol.addEventListener("click", olvido);
     $("#fauth").addEventListener("submit", function (e) {
       e.preventDefault(); var er = $("#a-err"), btn = e.target.querySelector("button[type=submit]"); er.textContent = "";
       var body = { email: $("#a-e").value, password: $("#a-p").value };
-      if (modo === "registro") { body.nombre = $("#a-n").value; body.telefono = $("#a-t").value; body.amiga = $("#a-a").value; body.acepto = $("#a-ok").checked; body.novedades = $("#a-nov").checked; }
+      if (modo === "registro") { body.nombre = $("#a-n").value; body.telefono = $("#a-t").value; body.amiga = $("#a-a").value; body.acepto = $("#a-ok").checked; body.novedades = $("#a-nov").checked; var dd = $("#a-d").value, mm = $("#a-m").value; if (dd && mm) body.cumple = mm + "-" + dd; }
       btn.disabled = true; btn.textContent = "Un momento…";
       api("auth/" + modo, body).then(function () { return loadYo(); }).then(function () { toast(modo === "registro" ? "¡Bienvenida al club! Ya tienes tus puntos 🎉" : "¡Hola de nuevo!"); if (amiga) history.replaceState(null, "", location.pathname + location.hash); amiga = ""; panel(); $("#dc-b").scrollTop = 0; })
         .catch(function (x) { er.textContent = x.message; btn.disabled = false; btn.textContent = modo === "registro" ? "Crear mi cuenta" : "Entrar"; });
     });
+  }
+  var MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+  function selDia(id) { var o = '<select class="inp" id="' + id + '" aria-label="Día"><option value="">Día</option>'; for (var i = 1; i <= 31; i++) o += '<option value="' + String(i).padStart(2, "0") + '">' + i + "</option>"; return o + "</select>"; }
+  function selMes(id) { return '<select class="inp" id="' + id + '" aria-label="Mes"><option value="">Mes</option>' + MESES.map(function (m, i) { return '<option value="' + String(i + 1).padStart(2, "0") + '">' + m + "</option>"; }).join("") + "</select>"; }
+  function olvido() {
+    $("#dc-t").textContent = "Recuperar contraseña";
+    $("#dc-b").innerHTML = '<p class="lead" style="margin-bottom:1rem">Escribe tu correo y te enviamos un enlace para elegir una contraseña nueva.</p><form class="form" id="folv" novalidate><div class="fld"><label for="o-e">Correo</label><input class="inp" id="o-e" type="email" inputmode="email" autocomplete="email" required></div><p class="err" id="o-err" role="status"></p><button class="btn gold full" type="submit">Enviar enlace</button><button class="lnk2" type="button" data-auth="entrar">Volver a entrar</button></form>';
+    $("#folv").addEventListener("submit", function (e) {
+      e.preventDefault(); var out = $("#o-err"), btn = e.target.querySelector("button[type=submit]"); btn.disabled = true;
+      api("auth/olvido", { email: $("#o-e").value }).then(function (d) {
+        out.style.color = "var(--ok)";
+        out.innerHTML = d.sinCorreo ? 'En esta demo aún no están activados los correos. Escríbenos por <a href="https://wa.me/34628224719?text=' + encodeURIComponent("Hola, no recuerdo la contraseña del club") + '" target="_blank" rel="noopener">WhatsApp</a> y te ayudamos.' : "Si ese correo tiene cuenta, te acabamos de enviar el enlace (mira también en spam).";
+      }).catch(function (x) { out.style.color = ""; out.textContent = x.message; btn.disabled = false; });
+    });
+  }
+  function resetView(tok) {
+    $("#dc-t").textContent = "Contraseña nueva";
+    $("#dc-b").innerHTML = '<form class="form" id="frs" novalidate><div class="fld"><label for="r-p">Contraseña nueva</label><input class="inp" id="r-p" type="password" autocomplete="new-password" minlength="8" maxlength="128" required><small style="color:var(--soft);font-size:.78rem">Mínimo 8 caracteres.</small></div><p class="err" id="r-err" role="alert"></p><button class="btn gold full" type="submit">Guardar y entrar</button></form>';
+    $("#frs").addEventListener("submit", function (e) {
+      e.preventDefault(); var er = $("#r-err");
+      api("auth/restablecer", { token: tok, password: $("#r-p").value }).then(function () { history.replaceState(null, "", location.pathname + "#club"); return loadYo(); }).then(function () { toast("Contraseña cambiada ✓"); panel(); }).catch(function (x) { er.textContent = x.message; });
+    });
+    openDr("cuenta");
   }
   function fecha(s) { var d = new Date(String(s).replace(" ", "T") + "Z"); return isNaN(d) ? "" : d.toLocaleDateString("es-ES", { day: "numeric", month: "short" }); }
   function panel() {
@@ -173,6 +227,8 @@
       '<div class="blk"><h3>Canjea tus puntos</h3><div class="rwb">' + CAT.recompensas.map(function (r) { return '<button type="button" data-rw="' + r.id + '"' + (YO.puntos < r.puntos ? " disabled" : "") + "><span>" + esc(r.nombre) + "<br><small style=\"color:var(--soft)\">" + esc(r.desc) + "</small></span><b>" + r.puntos + " pts</b></button>"; }).join("") + "</div></div>" +
       (YO.canjes.length ? '<div class="blk"><h3>Tus premios</h3><ul class="list">' + YO.canjes.map(function (c) { return "<li><span>" + esc(c.reward) + "<small>Enséñalo en el salón</small></span><b>" + esc(c.code) + "</b></li>"; }).join("") + "</ul></div>" : "") +
       '<div class="blk"><h3>Invita a una amiga · +' + CAT.club.amiga + ' puntos para las dos</h3><div class="prow"><a class="btn gold sm" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent("Te invito al club del Salón Marta Vega: con mi enlace tienes 125 puntos de regalo 💇‍♀️ " + inv) + '">Invitar por WhatsApp</a><button class="btn sm" type="button" data-copy="' + esc(inv) + '">Copiar enlace</button></div></div>' +
+      '<div class="blk"><h3>Sorteo de ' + esc(SORTEO ? SORTEO.mes : "este mes") + '</h3><div class="perk" style="margin:0">🎟️ <span>Tienes <b>' + YO.sorteo + ' participaciones</b> para ' + esc(CAT.sorteo.premio) + '. Más visitas y amigas invitadas = más papeletas.</span></div></div>' +
+      (u.cumple ? '<div class="blk"><h3>Tu cumpleaños</h3><p style="color:var(--mute);font-size:.9rem">🎂 ' + (+u.cumple.slice(3)) + " de " + MESES[+u.cumple.slice(0, 2) - 1] + ': ese día te llega un regalo al club.</p></div>' : '<div class="blk"><h3>¿Cuándo es tu cumpleaños?</h3><p style="color:var(--mute);font-size:.86rem;margin-bottom:.6rem">Te dejamos un regalo ese día en el club.</p><div class="row2" style="grid-template-columns:1fr 1.4fr 1fr">' + selDia("c-d") + selMes("c-m") + '<button class="btn sm" type="button" id="b-cumple">Guardar</button></div></div>') +
       '<div class="blk"><h3>Prueba el club (demo)</h3><button class="btn sm" type="button" id="b-visita">Simular una visita de ' + CAT.club.visitaDemo + " € (+puntos)</button></div>" +
       '<div class="blk"><h3>Movimientos</h3><ul class="list">' + YO.historial.map(function (h) { return "<li><span>" + esc(h.reason) + "<small>" + fecha(h.created_at) + '</small></span><span class="' + (h.delta > 0 ? "pos" : "neg") + '">' + (h.delta > 0 ? "+" : "") + h.delta + "</span></li>"; }).join("") + "</ul></div>" +
       (YO.regalos.length ? '<div class="blk"><h3>Tarjetas regalo compradas</h3><ul class="list">' + YO.regalos.map(function (g) { return "<li><span>Para " + esc(g.to_name) + "<small>" + esc(g.code) + "</small></span><b>" + eur(g.balance_c / 100) + "</b></li>"; }).join("") + "</ul></div>" : "") +
@@ -183,6 +239,7 @@
       if (!confirmar("¿Canjear «" + b.querySelector("span").firstChild.textContent + "»?")) return;
       b.disabled = true; api("club/canjear", { recompensa: b.dataset.rw }).then(function (d) { toast("Premio canjeado: " + d.codigo); loadYo(); }).catch(function (x) { toast(x.message); b.disabled = false; });
     }); });
+    var bc = $("#b-cumple"); if (bc) bc.addEventListener("click", function () { var d = $("#c-d").value, m = $("#c-m").value; if (!d || !m) { toast("Elige el día y el mes"); return; } api("yo/cumple", { cumple: m + "-" + d }).then(function () { toast("¡Apuntado! 🎂"); loadYo(); }).catch(function (x) { toast(x.message); }); });
     $("#b-visita").addEventListener("click", function (e) { e.target.disabled = true; api("club/visita", {}).then(function (d) { toast("+" + d.puntos + " puntos por tu visita ✨"); loadYo(); }).catch(function (x) { toast(x.message); e.target.disabled = false; }); });
     $("#b-salir").addEventListener("click", function () { api("auth/salir", {}).then(function () { YO = null; card(); closeDr(); toast("Has cerrado sesión."); }); });
     $("#b-borrar").addEventListener("click", function () { if (!confirmar("Se borrarán tu cuenta y tus puntos. ¿Seguro?")) return; api("auth/borrar", {}).then(function () { YO = null; card(); closeDr(); toast("Cuenta borrada."); }); });
@@ -211,15 +268,15 @@
     e.preventDefault(); var er = $("#g-err"); er.textContent = "";
     if ($("#g-otro").value && !(G.imp >= 10 && G.imp <= 300 && +$("#g-otro").value === G.imp)) { er.textContent = "Elige un importe entre 10 y 300 €."; return; }
     var btn = e.target.querySelector("button[type=submit]"); btn.disabled = true;
-    api("regalo", { importe: G.imp, de: $("#g-de").value, para: $("#g-para").value, mensaje: $("#g-msg").value, diseno: G.dis })
-      .then(function (d) { giftOk(d); if (YO) loadYo(); })
+    api("regalo", { importe: G.imp, de: $("#g-de").value, para: $("#g-para").value, mensaje: $("#g-msg").value, diseno: G.dis, email: $("#g-mail").value })
+      .then(function (d) { checkout(d.pago, "Tarjeta regalo para " + $("#g-para").value, function (r) { d.puntos = r.puntos; d.last4 = r.last4; giftOk(d); toast("Pago completado ✓"); }); })
       .catch(function (x) { er.textContent = x.message; })
       .then(function () { btn.disabled = false; });
   });
   function giftOk(d) {
     var link = location.origin + location.pathname + "?tarjeta=" + d.codigo + "#regalo";
     var box = $("#g-ok");
-    box.innerHTML = '<div class="ok-box"><b>¡Tarjeta lista! 🎁</b><p>Código de la tarjeta de ' + d.importe + " € para " + esc($("#g-para").value) + ":</p><div class=\"cd\">" + esc(d.codigo) + '</div><div style="width:120px;background:#fff;border-radius:12px;padding:6px">' + qr(link, 108) + '</div>' + (d.puntos ? "<p>Has sumado <b>" + d.puntos + " puntos</b> al club.</p>" : "") + '<div class="prow"><a class="btn gold sm" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent("🎁 Tienes una tarjeta regalo de " + d.importe + " € en el Salón Marta Vega. Código " + d.codigo + ". Reserva aquí: " + link) + '">Enviar por WhatsApp</a><button class="btn sm" type="button" id="g-png">Descargar imagen</button><button class="btn sm" type="button" data-copy="' + d.codigo + '">Copiar código</button></div></div>';
+    box.innerHTML = '<div class="ok-box"><b>¡Tarjeta pagada y lista! 🎁</b>' + (d.last4 ? '<p style="color:var(--mute);font-size:.86rem">Pagada con tarjeta ···· ' + esc(d.last4) + ($("#g-mail").value ? " · se la hemos enviado a " + esc($("#g-mail").value) : "") + "</p>" : "") + '<p>Código de la tarjeta de ' + d.importe + " € para " + esc($("#g-para").value) + ":</p><div class=\"cd\">" + esc(d.codigo) + '</div><div style="width:120px;background:#fff;border-radius:12px;padding:6px">' + qr(link, 108) + '</div>' + (d.puntos ? "<p>Has sumado <b>" + d.puntos + " puntos</b> al club.</p>" : "") + '<div class="prow"><a class="btn gold sm" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent("🎁 Tienes una tarjeta regalo de " + d.importe + " € en el Salón Marta Vega. Código " + d.codigo + ". Reserva aquí: " + link) + '">Enviar por WhatsApp</a><button class="btn sm" type="button" id="g-png">Descargar imagen</button><button class="btn sm" type="button" data-copy="' + d.codigo + '">Copiar código</button></div></div>';
     box.hidden = false; $("#fgift").hidden = true;
     $("#g-png").addEventListener("click", function () { pngGift(d); });
     box.scrollIntoView({ behavior: RM ? "auto" : "smooth", block: "center" });
@@ -244,6 +301,29 @@
   $("#fsaldo").addEventListener("submit", function (e) { e.preventDefault(); saldo($("#s-cod").value.trim().toUpperCase()); });
   var tq = (new URLSearchParams(location.search).get("tarjeta") || "").toUpperCase();
   if (/^MVR-[A-Z0-9]{6}$/.test(tq)) { $("#s-cod").value = tq; saldo(tq); }
+
+  /* ---------- sorteo del mes y top invitadoras ---------- */
+  var SORTEO = null;
+  function drawSorteo() {
+    api("sorteo").then(function (d) {
+      SORTEO = d; var el = $("#sorteo"); if (!el) return;
+      el.innerHTML = '<div class="srt-h"><span>🎟️ Sorteo de ' + esc(d.mes) + '</span><b>' + esc(d.premio) + '</b><small>Entre todas las socias · termina el ' + new Date(d.fin + "T12:00:00").toLocaleDateString("es-ES", { day: "numeric", month: "long" }) + '</small></div>' +
+        '<div class="srt-t"><span class="lbl2">Top invitadoras del mes</span>' + (d.top.length ? '<ol>' + d.top.map(function (x, i) { return "<li><i>" + ["🥇", "🥈", "🥉", "4", "5"][i] + "</i><span>" + esc(x.nombre) + "</span><b>" + x.invitadas + (x.invitadas === 1 ? " amiga" : " amigas") + "</b></li>"; }).join("") + "</ol>" : '<p class="note" style="margin:0">Aún nadie este mes: ¡invita a una amiga y sé la primera!</p>') + "</div>";
+    }).catch(function () {});
+  }
+
+  /* ---------- antes y después ---------- */
+  $$(".ba").forEach(function (b) {
+    var r = b.querySelector("input"), drag = false;
+    function set() { b.style.setProperty("--p", r.value + "%"); }
+    function at(x) { var q = b.getBoundingClientRect(); r.value = Math.max(0, Math.min(100, Math.round((x - q.left) / q.width * 100))); set(); }
+    r.addEventListener("input", set);
+    b.addEventListener("pointerdown", function (e) { drag = true; at(e.clientX); });
+    b.addEventListener("pointermove", function (e) { if (drag || e.pointerType === "mouse") at(e.clientX); });
+    window.addEventListener("pointerup", function () { drag = false; });
+    b.addEventListener("touchmove", function (e) { var t = e.touches[0]; if (t) at(t.clientX); }, { passive: true });
+    set();
+  });
 
   /* ---------- campaña, horario ---------- */
   function countdown() {
@@ -274,6 +354,11 @@
   /* ---------- arranque ---------- */
   fetch("catalogo.json").then(function (r) { return r.json(); }).then(function (c) {
     CAT = c; drawServices("todo"); drawShop(); drawRewards(); gChips(); gPrev(); countdown(); horario(); cartN();
-    loadYo().then(function () { if (amiga && !YO) { authView("registro"); openDr("cuenta"); } });
+    drawSorteo();
+    loadYo().then(function () {
+      var rt = new URLSearchParams(location.search).get("reset");
+      if (rt && /^[0-9a-f]{64}$/.test(rt)) resetView(rt);
+      else if (amiga && !YO) { authView("registro"); openDr("cuenta"); }
+    });
   });
 })();
