@@ -1,0 +1,21 @@
+{
+  "name": "Salón Marta Vega",
+  "short_name": "Marta Vega",
+  "description": "Reserva tu cita, prueba colores, tu club de puntos y tarjetas regalo.",
+  "lang": "es",
+  "start_url": "./?app=1",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0d0a0b",
+  "theme_color": "#0d0a0b",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Reservar cita", "url": "./?app=1#servicios", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] },
+    { "name": "Mi club", "url": "./?app=1#club", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] },
+    { "name": "Tarjeta regalo", "url": "./?app=1#regalo", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] }
+  ]
+}
