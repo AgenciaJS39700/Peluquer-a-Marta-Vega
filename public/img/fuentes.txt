@@ -2,7 +2,6 @@
 salon https://d8j0ntlcm91z4.cloudfront.net/user_3KCXHxLegiA18O8VhrE2rEMT3uS/hf_20261029_183317_d97aa8ef-74e2-4139-bbf3-f44b750c7c0f.png
 balayage-proceso https://d8j0ntlcm91z4.cloudfront.net/user_3KCXHxLegiA18O8VhrE2rEMT3uS/hf_20261029_183317_2581cdc7-b84a-4dd8-ab1c-f5a7d33c2a69.png
 bob https://d8j0ntlcm91z4.cloudfront.net/user_3KCXHxLegiA18O8VhrE2rEMT3uS/hf_20261029_183316_b49b3a39-960e-433b-b211-17b23ebadf49.png
-barberia https://d8j0ntlcm91z4.cloudfront.net/user_3KCXHxLegiA18O8VhrE2rEMT3uS/hf_20261029_183316_cd485fcf-f2bb-43ae-bcf9-24733b78282d.png
 cobrizo https://d8j0ntlcm91z4.cloudfront.net/user_3KCXHxLegiA18O8VhrE2rEMT3uS/hf_20261029_183317_12c79789-0eb1-4ea2-af9d-c27115180d9d.png
 balayage https://d8j0ntlcm91z4.cloudfront.net/user_3KCXHxLegiA18O8VhrE2rEMT3uS/hf_20261029_183316_01175eb5-4427-441a-a3d5-e44f69a096a2.png
 keratina https://d8j0ntlcm91z4.cloudfront.net/user_3KCXHxLegiA18O8VhrE2rEMT3uS/hf_20261029_183317_fb8e20ad-c065-43bb-bc9b-737dfec42301.png
@@ -18,3 +17,4 @@ navidad https://d8j0ntlcm91z4.cloudfront.net/user_3KCXHxLegiA18O8VhrE2rEMT3uS/hf
 modelo https://d8j0ntlcm91z4.cloudfront.net/user_3KCXHxLegiA18O8VhrE2rEMT3uS/hf_20261029_183345_63c80133-1486-40b5-bcb7-e542b5d71278.png
 herramientas https://d8j0ntlcm91z4.cloudfront.net/user_3KCXHxLegiA18O8VhrE2rEMT3uS/hf_20261029_183345_4fd59270-2895-41f1-b42d-d773fdbde697.png
 peinado https://d8j0ntlcm91z4.cloudfront.net/user_3KCXHxLegiA18O8VhrE2rEMT3uS/hf_20261029_183345_60716e1d-5ca9-48bf-b343-3f954e8c39e0.png
+brushing https://d8j0ntlcm91z4.cloudfront.net/user_3KCXHxLegiA18O8VhrE2rEMT3uS/hf_20261029_190742_3d9c05e8-3c59-4b31-91ac-7ea2431b83b6.png

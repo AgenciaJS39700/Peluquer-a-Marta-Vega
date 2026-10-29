@@ -9,8 +9,8 @@
   },
   "servicios": [
     { "id": "corte-mujer", "cat": "corte", "nombre": "Corte mujer", "desc": "Lavado, corte y peinado a medida de tu rostro.", "precio": 35, "img": "bob", "tag": "Más reservado" },
-    { "id": "corte-caballero", "cat": "corte", "nombre": "Corte caballero", "desc": "Clásico o degradado, con acabado a navaja.", "precio": 16, "img": "barberia" },
-    { "id": "barba", "cat": "corte", "nombre": "Arreglo de barba", "desc": "Perfilado con navaja y toalla caliente.", "precio": 12, "img": "barberia" },
+    { "id": "brushing", "cat": "corte", "nombre": "Brushing y ondas", "desc": "Lavado y secado con volumen y movimiento.", "precio": 22, "img": "brushing" },
+    { "id": "babylights", "cat": "color", "nombre": "Babylights / raíz", "desc": "Mechas finas o retoque de raíz con brillo.", "precio": 45, "img": "balayage-proceso" },
     { "id": "color", "cat": "color", "nombre": "Color completo", "desc": "Tinte con tratamiento protector y brillo.", "precio": 55, "img": "cobrizo" },
     { "id": "balayage", "cat": "color", "nombre": "Balayage / mechas", "desc": "Técnica a mano alzada, tono personalizado.", "precio": 95, "img": "balayage", "tag": "Estrella" },
     { "id": "keratina", "cat": "tratamiento", "nombre": "Keratina", "desc": "Alisado y brillo espejo hasta 3 meses.", "precio": 70, "img": "keratina" },
