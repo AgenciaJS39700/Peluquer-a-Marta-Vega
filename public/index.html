@@ -21,6 +21,7 @@
 <link rel="preload" as="image" href="img/salon.webp" media="(min-width:761px)">
 <link rel="stylesheet" href="styles.css">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"HairSalon","name":"Salón Marta Vega","image":"img/salon.webp","telephone":"+34628224719","priceRange":"€€","address":{"@type":"PostalAddress","streetAddress":"C/ de la Luna, 9","addressLocality":"Villanueva del Mar","addressCountry":"ES"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Tuesday","Wednesday","Thursday","Friday"],"opens":"10:00","closes":"14:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":["Tuesday","Wednesday","Thursday","Friday"],"opens":"16:00","closes":"20:30"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Saturday","opens":"09:00","closes":"15:00"}]}</script>
+<link rel="stylesheet" href="movil.css">
 </head>
 <body>
 <a class="skip" href="#main">Saltar al contenido</a>
@@ -80,7 +81,7 @@
     <div class="tabs" role="toolbar" aria-label="Filtrar servicios">
       <button class="chip" type="button" data-f="todo" aria-pressed="true">Todo</button><button class="chip" type="button" data-f="corte" aria-pressed="false">Corte</button><button class="chip" type="button" data-f="color" aria-pressed="false">Color</button><button class="chip" type="button" data-f="tratamiento" aria-pressed="false">Tratamientos</button><button class="chip" type="button" data-f="belleza" aria-pressed="false">Belleza</button>
     </div>
-    <div class="svc" id="svc"></div>
+    <div class="svc mmore" data-max="6" data-more="Ver todos los servicios" id="svc"></div>
     <p class="note">Precios con IVA incluido. Cada euro que gastas suma 1 punto en el club.</p>
   </div>
 </section>
@@ -195,7 +196,7 @@
       <span class="kick">Tarjeta regalo</span>
       <h2 class="h2" id="t-reg">Regala <em>un rato para ella</em></h2>
       <p class="lead">Diseña la tarjeta, elige el importe y envíala por WhatsApp o imprímela. Vale para cualquier servicio o producto.</p>
-      <form class="form" id="fgift" novalidate style="margin-top:1.4rem">
+      <form class="form mfold" data-label="🎁 Diseñar mi tarjeta regalo" id="fgift" novalidate style="margin-top:1.4rem">
         <div class="fld"><span class="lbl2">Importe</span><div class="chips" id="g-imp" role="group" aria-label="Importe"></div><input class="inp" id="g-otro" type="number" inputmode="numeric" min="10" max="300" placeholder="Otro importe (10–300 €)" aria-label="Otro importe"></div>
         <div class="fld"><span class="lbl2">Diseño</span><div class="chips" id="g-dis" role="group" aria-label="Diseño"></div></div>
         <div class="row2"><div class="fld"><label for="g-para">Para</label><input class="inp" id="g-para" maxlength="40" autocomplete="off" required></div><div class="fld"><label for="g-de">De</label><input class="inp" id="g-de" maxlength="40" autocomplete="name" required></div></div>
@@ -329,5 +330,6 @@
 <script src="app.js" defer></script>
 <script src="probador.js" defer></script>
 <script src="https://agencia-js.com/asistentes/widget.js" data-negocio="demo-peluqueria" data-boton="no" async></script>
+<script src="movil.js" defer></script>
 </body>
 </html>
